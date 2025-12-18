@@ -1,0 +1,45 @@
+############################## LOGIN ##############################
+###
+POST http://localhost:3003/api/login/
+content-type: application/json
+
+{
+    "username": "test",
+    "password": "password"
+}
+
+
+############################## BLOGS ##############################
+###
+GET http://localhost:3003/api/blogs/
+
+###
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjY4ZWQ1MjI3NTRmZTdmNTQ3OGM0NDdiZiIsImlhdCI6MTc2MDM4NDY1N30.c64E5EwMU8BnH4KVyAhwNjlVx16i-XXkv2HT9SPm57Y
+
+{
+    "title": "test",
+    "author": "test",
+    "url": "test",
+    "likes": 20
+}
+
+###
+DELETE http://localhost:3003/api/blogs/68ed5823e447e377674ce879 HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjY4ZWQ1MjI3NTRmZTdmNTQ3OGM0NDdiZiIsImlhdCI6MTc2MDM4NDQ4NX0.MBUdpRt0BB2gdJly13zdZ3iD35eOWrbeURaj9XUjviI
+
+############################## USERS ##############################
+###
+GET http://localhost:3003/api/users/
+
+###
+POST http://localhost:3003/api/users/ HTTP/1.1
+content-type: application/json
+
+{
+    "username": "test",
+    "name": "Test user",
+    "password": "password"
+}
