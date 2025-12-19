@@ -27,7 +27,7 @@ jobs:
         run: npm install
       - name: Check lint style
         working-directory: ./blog-list-api
-        run: npm run eslint
+        run: npm run lint
       - name: Run build
         working-directory: ./blog-list-api
         run: npm run build
