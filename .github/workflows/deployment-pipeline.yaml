@@ -1,0 +1,97 @@
+name: Part 11 Deployment pipeline
+
+on:
+  workflow_dispatch:
+
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - "part11/full-stack-open-pokedex/**"
+#   pull_request:
+#     branches: [main]
+#     types: [opened, synchronize]
+
+jobs:
+  deploy_backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install dependencies
+        working-directory: ./blog-list-api
+        run: npm install
+      - name: Check lint style
+        working-directory: ./blog-list-api
+        run: npm run eslint
+      - name: Run build
+        working-directory: ./blog-list-api
+        run: npm run build
+      - name: Run tests
+        working-directory: ./blog-list-api
+        run: npm run test
+      - name: Trigger deployment
+        if: ${{ github.event_name == 'push' }}
+        run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID_BACKEND }}?key=${{ secrets.RENDER_API_KEY_BACKEND }}
+
+  deploy_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install dependencies
+        working-directory: ./blog-list-app
+        run: npm install
+      - name: Check lint style
+        working-directory: ./blog-list-app
+        run: npm run lint
+      - name: Run build
+        working-directory: ./blog-list-app
+        run: npm run build
+      - name: Trigger deployment
+        if: ${{ github.event_name == 'push' }}
+        run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID_FRONTEND }}?key=${{ secrets.RENDER_API_KEY_FRONTEND }}
+
+  tag_release:
+    if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
+    needs: [deploy_backend, deploy_frontend]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
+
+  # discord_notification:
+  #   if: ${{ always() }}
+  #   needs: [simple_deployment_pipeline]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Successful build
+  #       if: ${{ needs.simple_deployment_pipeline.result == 'success' }}
+  #       uses: sarisia/actions-status-discord@v1
+  #       with:
+  #         webhook: ${{ secrets.DISCORD_WEBHOOK }}
+  #         username: GitHub
+  #         color: 0x23C552
+  #         title: "Deployment succeeded, new version released!!"
+  #         description: "to https://full-stack-open-pokedex-u6ry.onrender.com/ by ${{ github.actor }}"
+
+  #     - name: Error in build
+  #       if: ${{ needs.simple_deployment_pipeline.result == 'failure' }}
+  #       uses: sarisia/actions-status-discord@v1
+  #       with:
+  #         webhook: ${{ secrets.DISCORD_WEBHOOK }}
+  #         username: GitHub
+  #         color: 0xF84F31
+  #         title: "Build failed: something went wrong"
+  #         description: "in commit > https://github.com/${{ github.repository }}/commit/${{ github.sha }}!. Blame ${{ github.actor }} for this"

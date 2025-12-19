@@ -1,0 +1,17 @@
+name: Part 11 Deployment checkup
+
+on:
+  # schedule:
+  #   - cron: "00 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  checkup_deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout part11 deployment on Render
+        uses: jtalk/url-health-check-action@v4
+        with:
+          url: https://univ-helsinki-fullstack-exercise-11-20-dwzj.onrender.com
+          max-attempts: 3
+          retry-delay: 5s
