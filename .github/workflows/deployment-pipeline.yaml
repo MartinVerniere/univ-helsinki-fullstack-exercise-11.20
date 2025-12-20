@@ -1,17 +1,12 @@
 name: Part 11 Deployment pipeline
 
 on:
-  workflow_dispatch:
-
-# on:
-#   push:
-#     branches:
-#       - main
-#     paths:
-#       - "part11/full-stack-open-pokedex/**"
-#   pull_request:
-#     branches: [main]
-#     types: [opened, synchronize]
+  push:
+    branches:
+    - main
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
 
 jobs:
   deploy_backend:
