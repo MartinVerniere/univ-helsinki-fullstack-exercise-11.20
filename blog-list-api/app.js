@@ -1,10 +1,10 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
-const config = require('./utils/config')
-const logger = require('./utils/logger')
-const middleware = require('./utils/middleware')
-const blogsRouter = require('./controllers/blog')
+const config = require('./utils/config').default
+const logger = require('./utils/logger').default
+const middleware = require('./utils/middleware').default
+const blogsRouter = require('./controllers/blog').default
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 

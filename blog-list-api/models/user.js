@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
+import { Schema, model } from 'mongoose'
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
 	username: {
 		type: String,
 		required: true,
@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
 	passwordHash: String,
 	blogs: [
 		{
-			type: mongoose.Schema.Types.ObjectId,
+			type: Schema.Types.ObjectId,
 			ref: 'Blog'
 		}
 	],
@@ -27,6 +27,6 @@ userSchema.set('toJSON', {
 	}
 })
 
-const User = mongoose.model('User', userSchema)
+const User = model('User', userSchema)
 
-module.exports = User
+export default User

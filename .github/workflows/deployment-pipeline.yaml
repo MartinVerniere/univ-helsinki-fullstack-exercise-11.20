@@ -1,4 +1,4 @@
-name: Part 11 Deployment pipeline
+name: 11.20 - Deployment pipeline
 
 on:
   push:

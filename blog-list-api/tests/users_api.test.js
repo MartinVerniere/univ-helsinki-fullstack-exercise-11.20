@@ -1,30 +1,30 @@
-const bcrypt = require('bcrypt')
-const User = require('../models/user')
-const Blog = require('../models/blog')
-const assert = require('node:assert')
-const { test, after, beforeEach, describe } = require('node:test')
-const mongoose = require('mongoose')
-const supertest = require('supertest')
-const app = require('../app')
-const helper = require('./test_helper')
+import { hash } from 'bcrypt'
+import User, { deleteMany } from '../models/user'
+import { deleteMany as _deleteMany } from '../models/blog'
+import assert, { strictEqual } from 'node:assert'
+import { test, after, beforeEach, describe } from 'node:test'
+import { connection } from 'mongoose'
+import supertest from 'supertest'
+import app from '../app'
+import { usersInDb } from './test_helper'
 
 const api = supertest(app)
 
 describe('when there is initially one user in db', () => {
 	beforeEach(async () => {
-		await User.deleteMany({})
-		await Blog.deleteMany({})
+		await deleteMany({})
+		await _deleteMany({})
 
-		const passwordHash = await bcrypt.hash('sekret', 10)
+		const passwordHash = await hash('sekret', 10)
 		const user = new User({ name: 'test user', username: 'root', passwordHash })
 
 		await user.save()
 	})
 
 	test('creation succeeds with valid username and password ', async () => {
-		const usersAtStart = await helper.usersInDb()
+		const usersAtStart = await usersInDb()
 
-		console.log("Users in DB: ", usersAtStart)
+		console.log('Users in DB: ', usersAtStart)
 
 		const newUser = {
 			username: 'mluukkai',
@@ -38,8 +38,8 @@ describe('when there is initially one user in db', () => {
 			.expect(201)
 			.expect('Content-Type', /application\/json/)
 
-		const usersAtEnd = await helper.usersInDb()
-		assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
+		const usersAtEnd = await usersInDb()
+		strictEqual(usersAtEnd.length, usersAtStart.length + 1)
 
 		const usernames = usersAtEnd.map(u => u.username)
 		assert(usernames.includes(newUser.username))
@@ -115,5 +115,5 @@ describe('when there is initially one user in db', () => {
 })
 
 after(async () => {
-	await mongoose.connection.close()
+	await connection.close()
 })

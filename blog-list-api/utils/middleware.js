@@ -1,5 +1,5 @@
-const User = require('../models/user')
-const jwt = require('jsonwebtoken')
+import { findById } from '../models/user'
+import { verify } from 'jsonwebtoken'
 
 const requestLogger = (request, response, next) => {
 	console.log('Method:', request.method)
@@ -39,15 +39,15 @@ const tokenExtractor = (request, response, next) => {
 }
 
 const userExtractor = async (request, response, next) => {
-	const decodedToken = jwt.verify(request.token, process.env.SECRET)
+	const decodedToken = verify(request.token, process.env.SECRET)
 	if (!decodedToken.id) { return response.status(401).json({ error: 'token invalid' }) }
-	request.user = await User.findById(decodedToken.id)
+	request.user = await findById(decodedToken.id)
 	if (!request.user) { return response.status(401).json({ error: 'User associated with token not found' }) }
 
 	next()
 }
 
-module.exports = {
+export default {
 	requestLogger,
 	unknownEndpoint,
 	errorHandler,

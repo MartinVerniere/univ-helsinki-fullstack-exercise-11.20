@@ -1,6 +1,7 @@
 {
 	"name": "blog-list",
 	"version": "1.0.0",
+	"type": "module",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
@@ -25,6 +26,11 @@
 		"mongoose": "^8.19.1"
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.39.2",
+		"eslint": "^9.39.2",
+		"eslint-plugin-react-hooks": "^7.0.1",
+		"eslint-plugin-react-refresh": "^0.4.26",
+		"globals": "^16.5.0",
 		"supertest": "^7.1.4"
 	}
 }

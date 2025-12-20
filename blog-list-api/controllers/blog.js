@@ -1,6 +1,6 @@
 const blogsRouter = require('express').Router()
-const Blog = require('../models/blog')
-const middleware = require('../utils/middleware')
+import Blog from '../models/blog'
+import middleware from '../utils/middleware'
 
 blogsRouter.get('/', async (request, response) => {
 	const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, url: 1, likes: 1 })
@@ -55,7 +55,7 @@ blogsRouter.put('/:id', async (request, response) => {
 	const { id } = request.params
 	const { title, author, url, likes, user } = request.body
 
-	console.log("id: ", id);
+	console.log('id: ', id)
 
 	const blogToUpdate = await Blog.findById(id)
 
@@ -74,4 +74,4 @@ blogsRouter.put('/:id', async (request, response) => {
 	response.status(201).json(blogWithUser)
 })
 
-module.exports = blogsRouter
+export default blogsRouter

@@ -1,9 +1,9 @@
-const bcrypt = require('bcrypt')
+import { hash } from 'bcrypt'
 const usersRouter = require('express').Router()
-const User = require('../models/user')
+import User, { find } from '../models/user'
 
 usersRouter.get('/', async (request, response) => {
-	const users = await User.find({}).populate('blogs', { title: 1, author: 1 })
+	const users = await find({}).populate('blogs', { title: 1, author: 1 })
 	response.json(users)
 })
 
@@ -14,7 +14,7 @@ usersRouter.post('/', async (request, response) => {
 	if (password.length < 3) return response.status(400).send({ error: 'Password length must be larger 3 or more characters long' })
 
 	const saltRounds = 10
-	const passwordHash = await bcrypt.hash(password, saltRounds)
+	const passwordHash = await hash(password, saltRounds)
 
 	const user = new User({
 		username,
@@ -27,4 +27,4 @@ usersRouter.post('/', async (request, response) => {
 	response.status(201).json(savedUser)
 })
 
-module.exports = usersRouter
+export default usersRouter

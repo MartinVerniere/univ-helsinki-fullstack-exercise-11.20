@@ -1,12 +1,12 @@
-const mongoose = require('mongoose')
+import { Schema, model } from 'mongoose'
 
-const blogSchema = mongoose.Schema({
+const blogSchema = Schema({
 	title: String,
 	author: String,
 	url: String,
 	likes: Number,
 	user: {
-		type: mongoose.Schema.Types.ObjectId,
+		type: Schema.Types.ObjectId,
 		ref: 'User'
 	}
 })
@@ -19,4 +19,4 @@ blogSchema.set('toJSON', {
 	}
 })
 
-module.exports = mongoose.model('Blog', blogSchema)
+export default model('Blog', blogSchema)
