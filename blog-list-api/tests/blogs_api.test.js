@@ -1,4 +1,4 @@
-import { test, after, beforeEach, describe } from 'node:test'
+import { test, before, after, beforeEach, describe } from 'node:test'
 import mongoose from 'mongoose'
 import assert, { strictEqual, ok } from 'node:assert'
 import supertest from 'supertest'
@@ -11,6 +11,10 @@ import { hash } from 'bcrypt'
 const { initialBlogs, blogsInDb } = testHelper
 const { connection } = mongoose
 const api = supertest(app)
+
+before(async () => {
+	await mongoose.connect(process.env.MONGODB_URI)
+})
 
 const loginAndGetToken = async () => {
 	const response = await api

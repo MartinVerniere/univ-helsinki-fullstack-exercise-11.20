@@ -2,7 +2,7 @@ import { hash } from 'bcrypt'
 import User from '../models/user.js'
 import Blog from '../models/blog.js'
 import assert, { strictEqual } from 'node:assert'
-import { test, after, beforeEach, describe } from 'node:test'
+import { test, before, after, beforeEach, describe } from 'node:test'
 import mongoose from 'mongoose'
 import supertest from 'supertest'
 import app from '../app.js'
@@ -11,6 +11,10 @@ import testHelper from './test_helper.js'
 const { usersInDb } = testHelper
 const { connection } = mongoose
 const api = supertest(app)
+
+before(async () => {
+	await mongoose.connect(process.env.MONGODB_URI)
+})
 
 describe('when there is initially one user in db', () => {
 	beforeEach(async () => {
