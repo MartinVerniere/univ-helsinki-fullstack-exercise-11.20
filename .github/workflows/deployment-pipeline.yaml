@@ -11,6 +11,16 @@ on:
 jobs:
   deploy_backend:
     runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:6
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
@@ -26,12 +36,17 @@ jobs:
       - name: Run tests
         working-directory: ./blog-list-api
         run: npm run test
+        env:
+          NODE_ENV: test
+          MONGODB_URI: mongodb://localhost:27017/bloglist-test
+          SECRET: testsecret
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID_BACKEND }}?key=${{ secrets.RENDER_API_KEY_BACKEND }}
 
   deploy_frontend:
     runs-on: ubuntu-latest
+    needs: [deploy_backend]
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
