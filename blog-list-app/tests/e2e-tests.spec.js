@@ -1,6 +1,6 @@
-import { test, describe, expect } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 
-describe('Blog-list', () => {
+test.describe('Blog-list', () => {
 	test.beforeEach(async ({ request, page }) => {
 		await request.post('http://localhost:3001/api/testing/reset')
 
