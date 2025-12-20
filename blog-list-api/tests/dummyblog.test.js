@@ -1,6 +1,8 @@
 import { test } from 'node:test'
 import { strictEqual } from 'node:assert'
-import { dummy } from '../utils/list_helper.js'
+import listHelper from '../utils/list_helper.js'
+
+const { dummy } = listHelper
 
 test('dummy returns one', () => {
 	const blogs = []

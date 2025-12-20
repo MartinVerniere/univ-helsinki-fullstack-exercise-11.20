@@ -1,5 +1,5 @@
-import Blog, { find } from '../models/blog.js'
-import { find as _find } from '../models/user.js'
+import Blog from '../models/blog.js'
+import User from '../models/user.js'
 
 const initialBlogs = [
 	{
@@ -37,12 +37,12 @@ const nonExistingId = async () => {
 }
 
 const blogsInDb = async () => {
-	const blogs = await find({})
+	const blogs = await Blog.find({})
 	return blogs.map(blog => blog.toJSON())
 }
 
 const usersInDb = async () => {
-	const users = await _find({})
+	const users = await User.find({})
 	return users.map(user => user.toJSON())
 }
 

@@ -1,6 +1,8 @@
 import { test, describe } from 'node:test'
 import { deepStrictEqual } from 'node:assert'
-import { favouriteBlog as _favouriteBlog } from '../utils/list_helper.js'
+import listHelper from '../utils/list_helper.js'
+
+const favouriteBlogHelper = listHelper.favouriteBlog
 
 describe('favourite blog', () => {
 
@@ -25,7 +27,7 @@ describe('favourite blog', () => {
 	]
 
 	test('when list has only one blog, equals the only one', () => {
-		const result = _favouriteBlog(listWithOneBlog)
+		const result = favouriteBlogHelper(listWithOneBlog)
 		deepStrictEqual(result, favouriteBlog)
 	})
 
@@ -90,7 +92,7 @@ describe('favourite blog', () => {
 	]
 
 	test('when list has more than one blog, equals the one with the most likes', () => {
-		const result = _favouriteBlog(listWithMoreThanOneBlog)
+		const result = favouriteBlogHelper(listWithMoreThanOneBlog)
 		deepStrictEqual(result, favouriteBlog2)
 	})
 })

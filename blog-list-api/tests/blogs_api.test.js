@@ -1,21 +1,23 @@
 import { test, after, beforeEach, describe } from 'node:test'
-import { connection } from 'mongoose'
+import mongoose from 'mongoose'
 import assert, { strictEqual, ok } from 'node:assert'
 import supertest from 'supertest'
 import app from '../app.js'
-import { deleteMany, insertMany } from '../models/blog.js'
-import { initialBlogs, blogsInDb } from './test_helper.js'
-import User, { deleteMany as _deleteMany } from '../models/user.js'
+import testHelper from './test_helper.js'
+import User from '../models/user.js'
+import Blog from '../models/blog.js'
 import { hash } from 'bcrypt'
 
+const { initialBlogs, blogsInDb } = testHelper
+const { connection } = mongoose
 const api = supertest(app)
 
 let token = ''
 
 describe('when initially blogs database is empty', () => {
 	beforeEach(async () => {
-		await _deleteMany({})
-		await deleteMany({})
+		await User.deleteMany({})
+		await Blog.deleteMany({})
 
 		const saltRounds = 10
 		const passwordHash = await hash('password', saltRounds)
@@ -23,7 +25,7 @@ describe('when initially blogs database is empty', () => {
 		await user.save()
 
 		const newUserID = user._id
-		await insertMany(initialBlogs.map(blog => ({ ...blog, user: newUserID })))
+		await Blog.insertMany(initialBlogs.map(blog => ({ ...blog, user: newUserID })))
 
 		const response = await api.post('/api/login').send({ username: 'test', password: 'password' })
 		token = response.body.token

@@ -1,19 +1,21 @@
 import { hash } from 'bcrypt'
-import User, { deleteMany } from '../models/user.js'
-import { deleteMany as _deleteMany } from '../models/blog.js'
+import User from '../models/user.js'
+import Blog from '../models/blog.js'
 import assert, { strictEqual } from 'node:assert'
 import { test, after, beforeEach, describe } from 'node:test'
-import { connection } from 'mongoose'
+import mongoose from 'mongoose'
 import supertest from 'supertest'
 import app from '../app.js'
-import { usersInDb } from './test_helper.js'
+import testHelper from './test_helper.js'
 
+const { usersInDb } = testHelper
+const { connection } = mongoose
 const api = supertest(app)
 
 describe('when there is initially one user in db', () => {
 	beforeEach(async () => {
-		await deleteMany({})
-		await _deleteMany({})
+		await User.deleteMany({})
+		await Blog.deleteMany({})
 
 		const passwordHash = await hash('sekret', 10)
 		const user = new User({ name: 'test user', username: 'root', passwordHash })

@@ -1,4 +1,6 @@
-import { countBy, map, maxBy, groupBy, sumBy } from 'lodash'
+import _ from 'lodash'
+
+const { countBy, map, maxBy, groupBy, sumBy } = _
 
 const dummy = () => {
 	return 1
