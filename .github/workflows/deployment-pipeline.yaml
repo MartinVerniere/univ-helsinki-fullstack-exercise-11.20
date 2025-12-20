@@ -3,7 +3,7 @@ name: 11.20 - Deployment pipeline
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
     branches: [main]
     types: [opened, synchronize]
@@ -23,9 +23,6 @@ jobs:
       - name: Check lint style
         working-directory: ./blog-list-api
         run: npm run lint
-      - name: Run build
-        working-directory: ./blog-list-api
-        run: npm run build
       - name: Run tests
         working-directory: ./blog-list-api
         run: npm run test
