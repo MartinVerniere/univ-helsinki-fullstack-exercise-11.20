@@ -1,14 +1,16 @@
-import { sign } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import { compare } from 'bcrypt'
 import express from 'express'
-import { findOne } from '../models/user'
+import User from '../models/user.js'
+
+const { sign } = jwt
 
 const loginRouter = express.Router()
 
 loginRouter.post('/', async (request, response) => {
 	const { username, password } = request.body
 
-	const user = await findOne({ username })
+	const user = await User.findOne({ username })
 	const passwordCorrect = user === null
 		? false
 		: await compare(password, user.passwordHash)

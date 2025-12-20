@@ -1,6 +1,8 @@
-const blogsRouter = require('express').Router()
-import Blog from '../models/blog'
-import middleware from '../utils/middleware'
+import { Router } from 'express'
+import Blog from '../models/blog.js'
+import middleware from '../utils/middleware.js'
+
+const blogsRouter = Router()
 
 blogsRouter.get('/', async (request, response) => {
 	const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, url: 1, likes: 1 })

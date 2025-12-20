@@ -1,5 +1,5 @@
-import Blog, { find } from '../models/blog'
-import { find as _find } from '../models/user'
+import Blog, { find } from '../models/blog.js'
+import { find as _find } from '../models/user.js'
 
 const initialBlogs = [
 	{

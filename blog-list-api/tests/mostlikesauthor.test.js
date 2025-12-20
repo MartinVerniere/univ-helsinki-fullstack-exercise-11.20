@@ -1,6 +1,6 @@
 import { test, describe } from 'node:test'
 import { deepStrictEqual } from 'node:assert'
-import { mostLikes } from '../utils/list_helper'
+import { mostLikes } from '../utils/list_helper.js'
 
 describe('most blog likes author', () => {
 

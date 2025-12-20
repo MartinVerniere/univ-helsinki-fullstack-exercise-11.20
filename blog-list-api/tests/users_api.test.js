@@ -1,12 +1,12 @@
 import { hash } from 'bcrypt'
-import User, { deleteMany } from '../models/user'
-import { deleteMany as _deleteMany } from '../models/blog'
+import User, { deleteMany } from '../models/user.js'
+import { deleteMany as _deleteMany } from '../models/blog.js'
 import assert, { strictEqual } from 'node:assert'
 import { test, after, beforeEach, describe } from 'node:test'
 import { connection } from 'mongoose'
 import supertest from 'supertest'
-import app from '../app'
-import { usersInDb } from './test_helper'
+import app from '../app.js'
+import { usersInDb } from './test_helper.js'
 
 const api = supertest(app)
 

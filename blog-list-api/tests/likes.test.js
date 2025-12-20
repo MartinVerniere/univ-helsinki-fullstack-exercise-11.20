@@ -1,6 +1,6 @@
 import { test, describe } from 'node:test'
 import { strictEqual } from 'node:assert'
-import { totalLikes } from '../utils/list_helper'
+import { totalLikes } from '../utils/list_helper.js'
 
 describe('total likes', () => {
 	const listWithOneBlog = [

@@ -1,6 +1,6 @@
 import { test, describe } from 'node:test'
 import { deepStrictEqual } from 'node:assert'
-import { favouriteBlog as _favouriteBlog } from '../utils/list_helper'
+import { favouriteBlog as _favouriteBlog } from '../utils/list_helper.js'
 
 describe('favourite blog', () => {
 

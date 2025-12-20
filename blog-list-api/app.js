@@ -1,19 +1,19 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const cors = require('cors')
-const config = require('./utils/config').default
-const logger = require('./utils/logger').default
-const middleware = require('./utils/middleware').default
-const blogsRouter = require('./controllers/blog').default
-const usersRouter = require('./controllers/users')
-const loginRouter = require('./controllers/login')
+import express, { json } from 'express'
+import { connect } from 'mongoose'
+import cors from 'cors'
+import config from './utils/config.js'
+import logger from './utils/logger.js'
+import middleware from './utils/middleware.js'
+import blogsRouter from './controllers/blog.js'
+import usersRouter from './controllers/users.js'
+import loginRouter from './controllers/login.js'
+import testingRouter from './controllers/testing.js'
 
 const app = express()
 
 logger.info('connecting to', config.MONGODB_URI)
 
-mongoose
-	.connect(config.MONGODB_URI)
+connect(config.MONGODB_URI)
 	.then(() => {
 		logger.info('connected to MongoDB')
 	})
@@ -22,7 +22,7 @@ mongoose
 	})
 
 app.use(cors())
-app.use(express.json())
+app.use(json())
 app.use(middleware.requestLogger)
 
 app.use('/api/login', loginRouter)
@@ -30,11 +30,10 @@ app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 
 if (process.env.NODE_ENV === 'test') {
-	const testingRouter = require('./controllers/testing')
 	app.use('/api/testing', testingRouter)
 }
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
-module.exports = app
+export default app
