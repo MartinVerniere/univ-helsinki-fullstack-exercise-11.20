@@ -12,9 +12,14 @@ const { initialBlogs, blogsInDb } = testHelper
 const { connection } = mongoose
 const api = supertest(app)
 
-let token = ''
+const loginAndGetToken = async () => {
+	const response = await api
+		.post('/api/login')
+		.send({ username: 'test', password: 'password' })
+	return response.body.token
+}
 
-describe('when initially blogs database is empty', () => {
+describe('blog API', () => {
 	beforeEach(async () => {
 		await User.deleteMany({})
 		await Blog.deleteMany({})
@@ -26,26 +31,23 @@ describe('when initially blogs database is empty', () => {
 
 		const newUserID = user._id
 		await Blog.insertMany(initialBlogs.map(blog => ({ ...blog, user: newUserID })))
-
-		const response = await api.post('/api/login').send({ username: 'test', password: 'password' })
-		token = response.body.token
 	})
 
 	describe('while fetching blogs', () => {
-		test('are returned as json', async () => {
+		test('they are returned as json', async () => {
 			await api
 				.get('/api/blogs')
 				.expect(200)
 				.expect('Content-Type', /application\/json/)
 		})
 
-		test('are all returned', async () => {
+		test('they are all returned', async () => {
 			const response = await api.get('/api/blogs')
 
 			strictEqual(response.body.length, initialBlogs.length)
 		})
 
-		test('are all returned with property id', async () => {
+		test('they are all returned with property id', async () => {
 			const response = await api.get('/api/blogs')
 			const blogs = response.body
 
@@ -57,6 +59,8 @@ describe('when initially blogs database is empty', () => {
 
 	describe('while adding blogs', () => {
 		test('a valid blog can be added', async () => {
+			const token = await loginAndGetToken()
+
 			const newBlog = {
 				title: 'Test title',
 				author: 'Test author',
@@ -78,7 +82,9 @@ describe('when initially blogs database is empty', () => {
 			assert(contents.includes('Test title'))
 		})
 
-		test('blogs added without property likes, default to 0', async () => {
+		test('when blogs added without property likes, default to 0', async () => {
+			const token = await loginAndGetToken()
+
 			const newBlog = {
 				title: 'Test title',
 				author: 'Test author',
@@ -97,7 +103,9 @@ describe('when initially blogs database is empty', () => {
 			strictEqual(addedBlog.likes, 0)
 		})
 
-		test('blogs added without property title, return error 404', async () => {
+		test('when blogs added without property title, return error 404', async () => {
+			const token = await loginAndGetToken()
+
 			const newBlog = {
 				author: 'Test author',
 				url: 'https://test.com/',
@@ -110,7 +118,9 @@ describe('when initially blogs database is empty', () => {
 				.expect(400)
 		})
 
-		test('blogs added without property url, return error 404', async () => {
+		test('when blogs added without property url, return error 404', async () => {
+			const token = await loginAndGetToken()
+
 			const newBlog = {
 				title: 'Test title',
 				author: 'Test author',
@@ -123,7 +133,7 @@ describe('when initially blogs database is empty', () => {
 				.expect(400)
 		})
 
-		test('blogs added without token, return error 401 Unauthorized', async () => {
+		test('when blogs added without token, return error 401 Unauthorized', async () => {
 			const newBlog = {
 				title: 'Test title',
 				author: 'Test author',
@@ -140,6 +150,7 @@ describe('when initially blogs database is empty', () => {
 		test('a blog with valid id can be deleted', async () => {
 			const blogsAtStart = await blogsInDb()
 			const blogToDelete = blogsAtStart[0]
+			const token = await loginAndGetToken()
 
 			await api
 				.delete(`/api/blogs/${blogToDelete.id}`)
@@ -154,6 +165,8 @@ describe('when initially blogs database is empty', () => {
 		})
 
 		test('a blog with invalid id cant be deleted', async () => {
+			const token = await loginAndGetToken()
+
 			await api
 				.delete('/api/blogs/12')
 				.set('Authorization', `Bearer ${token}`)

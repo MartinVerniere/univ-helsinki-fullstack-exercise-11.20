@@ -21,7 +21,7 @@ blogsRouter.get('/:id', async (request, response) => {
 blogsRouter.post('/', middleware.tokenExtractor, middleware.userExtractor, async (request, response) => {
 	const user = request.user
 	const body = request.body
-	if (!body.url || !body.title) { response.status(400).json(request) }
+	if (!body.url || !body.title) { response.status(400).json({ error: 'title and url are required' }) }
 
 	const blog = new Blog({
 		title: body.title,

@@ -1,5 +1,5 @@
-import express, { json } from 'express'
-import { connect } from 'mongoose'
+import express from 'express'
+import mongoose from 'mongoose'
 import cors from 'cors'
 import config from './utils/config.js'
 import logger from './utils/logger.js'
@@ -10,6 +10,7 @@ import loginRouter from './controllers/login.js'
 import testingRouter from './controllers/testing.js'
 
 const app = express()
+const { connect } = mongoose
 
 logger.info('connecting to', config.MONGODB_URI)
 
@@ -22,9 +23,10 @@ connect(config.MONGODB_URI)
 	})
 
 app.use(cors())
-app.use(json())
+app.use(express.json())
 app.use(middleware.requestLogger)
 
+app.use('/ping', (req, res) => res.send('pong'))
 app.use('/api/login', loginRouter)
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)

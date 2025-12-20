@@ -102,7 +102,7 @@ const App = () => {
 	}
 
 	const loginForm = () => (
-		<Togglable buttonLabel="login" ref={null}>
+		<Togglable data-testid="show-login-form" buttonLabel="login" ref={null}>
 			<LoginForm login={login} />
 		</Togglable>
 	)
