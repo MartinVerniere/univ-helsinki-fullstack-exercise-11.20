@@ -27,6 +27,7 @@ jobs:
         working-directory: ./blog-list-api
         run: npm run test
         env:
+          NODE_ENV: test
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           SECRET: ${{ secrets.SECRET }}
       - name: Trigger deployment
@@ -72,28 +73,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
-
-  # discord_notification:
-  #   if: ${{ always() }}
-  #   needs: [simple_deployment_pipeline]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Successful build
-  #       if: ${{ needs.simple_deployment_pipeline.result == 'success' }}
-  #       uses: sarisia/actions-status-discord@v1
-  #       with:
-  #         webhook: ${{ secrets.DISCORD_WEBHOOK }}
-  #         username: GitHub
-  #         color: 0x23C552
-  #         title: "Deployment succeeded, new version released!!"
-  #         description: "to https://full-stack-open-pokedex-u6ry.onrender.com/ by ${{ github.actor }}"
-
-  #     - name: Error in build
-  #       if: ${{ needs.simple_deployment_pipeline.result == 'failure' }}
-  #       uses: sarisia/actions-status-discord@v1
-  #       with:
-  #         webhook: ${{ secrets.DISCORD_WEBHOOK }}
-  #         username: GitHub
-  #         color: 0xF84F31
-  #         title: "Build failed: something went wrong"
-  #         description: "in commit > https://github.com/${{ github.repository }}/commit/${{ github.sha }}!. Blame ${{ github.actor }} for this"
