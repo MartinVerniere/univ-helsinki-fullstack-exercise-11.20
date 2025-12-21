@@ -151,6 +151,7 @@ const App = () => {
 					<BlogList blogs={blogs} likeBlog={likeBlog} user={user} deleteBlog={deleteBlog} />
 				</div>
 			}
+			<footer>Version 1.0.0</footer>
 		</div >
 	)
 }
