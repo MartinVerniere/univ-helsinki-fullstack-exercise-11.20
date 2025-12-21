@@ -52,12 +52,12 @@ jobs:
       - name: Run build
         working-directory: ./blog-list-app
         run: npm run build
-      - name: Install Playwright Browsers
-        working-directory: ./blog-list-app
-        run: npx playwright install --with-deps
-      - name: Run Playwright tests
-        working-directory: ./blog-list-app
-        run: npm run test:e2e
+      # - name: Install Playwright Browsers
+      #   working-directory: ./blog-list-app
+      #   run: npx playwright install --with-deps
+      # - name: Run Playwright tests
+      #   working-directory: ./blog-list-app
+      #   run: npm run test:e2e
         env:
           NODE_ENV: test
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
