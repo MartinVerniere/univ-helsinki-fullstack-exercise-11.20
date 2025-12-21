@@ -8,5 +8,5 @@ Deployments
 - The frontend is deployed on Render at [https://univ-helsinki-fullstack-exercise-11-20-yxp7.onrender.com].
 
 Additional Info:
-- This repository is linked to my other full stack open course repository [], where I have done all exercise up to this point, divided in "parts" folders for each part of the course:
+- This repository is linked to my other full stack open course repository [https://github.com/MartinVerniere/univ-helsinki-fullstack-course], where I have done all exercise up to this point, divided in "parts" folders for each part of the course:
   - [see here: https://github.com/MartinVerniere/univ-helsinki-fullstack-course]
